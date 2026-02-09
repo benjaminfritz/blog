@@ -1,0 +1,14 @@
+{
+  "name": "Scrim-s0ktr6",
+  "description": "https://scrimba.com/learn-css-grid-c02k/~07",
+  "scripts": {
+    "start": "vite",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vite": "latest"
+  },
+  "devDependencies": {}
+}
