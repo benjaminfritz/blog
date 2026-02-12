@@ -8,19 +8,35 @@ import { Layout, FileImage, GitPullRequest, Database } from 'lucide-react';
 const App: React.FC = () => {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    let isMounted = true;
+
     const loadData = async () => {
       try {
         const result = await fetchDashboardData();
-        setData(result);
+        if (isMounted) {
+          setData(result);
+          setError(null);
+        }
       } catch (error) {
         console.error("Error while loading dashboard data", error);
+        if (isMounted) {
+          setError("Unable to load dashboard data. Please try again.");
+        }
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
+
     loadData();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   if (loading) return (
@@ -28,6 +44,14 @@ const App: React.FC = () => {
       <div className="animate-pulse flex flex-col items-center">
         <div className="h-12 w-12 bg-blue-500 rounded-full mb-4"></div>
         <div className="text-gray-400 font-medium">Loading brix/react Dashboard...</div>
+      </div>
+    </div>
+  );
+
+  if (error) return (
+    <div className="flex h-screen w-full items-center justify-center bg-gray-50 px-6">
+      <div className="max-w-md rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">
+        {error}
       </div>
     </div>
   );

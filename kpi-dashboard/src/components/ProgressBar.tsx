@@ -1,7 +1,11 @@
 import React from 'react';
 
 export const ProgressBar: React.FC<{ label: string; value: number; max: number; color: string }> = ({ label, value, max, color }) => {
-  const percentage = Math.min((value / max) * 100, 100);
+  const safeMax = max > 0 ? max : 1;
+  const rawPercentage = (value / safeMax) * 100;
+  const percentage = Number.isFinite(rawPercentage)
+    ? Math.min(Math.max(rawPercentage, 0), 100)
+    : 0;
   
   return (
     <div className="w-full">
